@@ -1,0 +1,12 @@
+<div class="row lastcall" ng-class="{error: lastCall.error}" ng-if="lastCall.url">
+	<div class="col-md-12">
+		<h3>Last called url</h3>
+		<pre>{{lastCall.method}}: {{lastCall.url}}</pre>
+		<div ng-if="lastCall.error">
+			<h3>Error:</h3>
+			<pre>{{lastCall.code}}: {{lastCall.error}}</pre>
+		</div>
+		<h3>Last Data retrieved</h3>
+		<pre style="max-height: 90vh; overflow-wrap: normal;">{{lastCall.data}}</pre>
+	</div>
+</div>

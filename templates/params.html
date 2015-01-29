@@ -1,0 +1,57 @@
+<h3 class="pointer" ng-click="params.hideParams = !params.hideParams;">
+<open-icon open="{{!params.hideParams}}"></open-icon> Parameters
+</h3>
+<div syle="overflow: hidden;">
+	<div class="jumbotron animated animateFadeInDown" ng-show="!params.hideParams" ng-submit="params.save()">
+		<h2>Credentials</h2>
+		<p>Enter your credential informations to configure CoWaBoo's API calls</p>
+		<form>
+			<div class="form-group" style="display:none;">
+				<h3 class="pointer" ng-click="paramDiigoShow = !paramDiigoShow"><open-icon open="{{paramDiigoShow}}"></open-icon> Diigo</h3>
+				<div ng-hide="!paramDiigoShow" class="animated animateFadeInDown">
+					<div class="form-group">
+						<label for="diigoUsername">Diigo username</label>
+						<input type="text" class="form-control" id="diigoUsername" placeholder="" ng-model="params.diigoUsername" readonly>
+						<p>the username of whose diigo library you want to access</p>
+					</div>
+					<div class="form-group">
+						<label for="diigoPwd">Diigo password</label>
+						<input type="password" class="form-control" id="diigoPwd" placeholder="" ng-model="params.diigoPwd" readonly>
+						<p>The password of the user (it won't be saved, but only used in order to generate the <a href="http://en.wikipedia.org/wiki/Basic_access_authentication" target="_blank">basic authentication key</a> that is <a href="https://www.diigo.com/api_dev#section-key" target="_blank">asked by Diigo to connect to the api</a>)</p>
+					</div>
+					<div class="form-group">
+						<label for="diigoAuth">Diigo authentication key</label>
+						<input type="text" class="form-control" id="diigoAuth" placeholder="" ng-model="params.diigoAuth" readonly>
+						<p>Your generated authentication key</p>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<h3 class="pointer" ng-click="paramZoteroShow = !paramZoteroShow"><open-icon open="{{paramZoteroShow}}"></open-icon> Zotero</h3>
+				<div ng-hide="!paramZoteroShow" class="animated animateFadeInDown">
+					<div class="form-group">
+						<label for="zoteroElementId">Zotero group id</label>
+						<input type="text" class="form-control" id="zoteroElementId" placeholder="" ng-model="params.zoteroElementId">
+						<p>The zotero library you want to access group's id. To find it, it is a bit tricky:
+						<ol>
+						<li><a href="https://www.zotero.org/groups/" target="_blank">Go to your zotero's group list</a></li>
+						<li>Then go to your group library (click, "Group Library")</li>
+						<li>In the bottom left, you'll find "Subscribe to this feed"</li>
+						<li>Copy this link, it shoud be something like <pre>https://api.zotero.org/groups/303941/items/top?start=0&limit=25&format=atom&v=1</pre></li>
+						<li>Take the number between "groups/" and "/items": <strong>It is your Zotero group id</strong></li>
+						</ol></p>
+					</div>
+					<div class="form-group">
+						<label for="zoteroKey">Zotero Api Key</label>
+						<input type="text" class="form-control" id="zoteroKey" placeholder="" ng-model="params.zoteroKey">
+						<p>Your personal zotero Api key. It is a key that identify the bearer and grant permission to write or read the user or group library. <a href="https://www.zotero.org/settings/keys" target="_blank">This key can be created or found in your zotero's settings</a> (it is called "private key").
+					              </p>
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">Save for this session</button>
+			<button type="button" class="btn btn-danger" ng-click="params.init();">Re-init values</button>
+		</form>
+	</div>
+</div>
+<hr/>

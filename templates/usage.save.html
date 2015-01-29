@@ -1,0 +1,39 @@
+<h3>Saving bookmarks<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+
+<form ng-submit="app.saveBookmark();">
+	<div class="form-group">
+		<label for="titleInput">Title of the new bookmark</label>
+		<input ng-model="app.newElement.title" type="text" class="form-control" id="titleInput" placeholder='My new bookmark' required>
+	</div>
+	<div class="form-group">
+		<label for="urlInput">Full url of the page you want to bookmark</label>
+		<input ng-model="app.newElement.url" type="url" class="form-control" id="urlInput" placeholder='full url (i.e: with "http://", or "https://")'required>
+	</div>
+	<div class="form-group">
+		<label for="descriptionInput">Description of the bookmarked page</label>
+		<textarea ng-model="app.newElement.description" class="form-control" id="descriptionInput" rows="3" placeholder="This is a very useful page because..."></textarea>
+	</div>
+	<div class="form-group">
+		<label for="tagInput">Comma seperated list of tags for the bookmark</label>
+
+		<button type="button" class="btn btn-primary" ng-click="app.retrieveTags()"><span ng-if="!app.tags.length">Retrieve all</span><span ng-if="app.tags.length">Refresh</span> tags</button>
+		<span ng-click="app.addTagToInput(tag.title)" class="tag label label-success pointer" ng-repeat="tag in app.tags">+ {{tag.title}}</span> 
+
+		<input ng-model="app.newElement.tags" type="text" class="form-control" id="tagInput" placeholder="education,culture,organisation..." required>
+	</div>
+	<button type="submit" class="btn btn-primary" >Save the bookmark</button><img src="assets/ajax-loader.gif" ng-show="app.loading" />
+</form>
+
+<div class="row" ng-if="app.lastCall">
+	<div class="col-md-12">
+		<h3>Last called url</h3>
+		<pre>{{app.lastCall.method}}: {{app.lastCall.url}}</pre>
+	</div>
+</div>
+
+<div class="row" ng-if="app.data">
+	<div class="col-md-12">
+		<h3>Results</h3>
+		<pre>{{app.data}}</pre>
+	</div>
+</div>

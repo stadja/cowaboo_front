@@ -1,0 +1,10 @@
+{
+  "name": "CoWaBoo",
+  "dependencies": {
+    "bootstrap": "latest",
+    "angular": "latest",
+    "angular-route": "latest",
+    "angular-animate": "latest",
+    "animate.css": "latest"
+  }
+}

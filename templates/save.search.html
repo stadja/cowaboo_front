@@ -1,0 +1,35 @@
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#/usage/search">Getting bookmarks</a></li>
+  <li role="presentation" class="active"><a href="#/usage/save">Saving bookmarks</a></li>
+</ul>
+
+<h3>Getting bookmarks<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+<button type="button" class="btn btn-primary" ng-click="app.search()">Search all bookmarks</button>
+<span class="tag label label-danger pointer" ng-repeat="tag in app.tags" ng-click="app.removeTagToFilter(tag)">{{tag}} X</span>
+
+<div class="row" ng-if="app.bookmarks.length">
+	<div class="col-md-12">
+		<h3>Url</h3>
+		<input type="text" ng-value="app.lastUrl" class="col-md-12"/>
+	</div>
+</div>
+<div class="row" ng-if="app.bookmarks.length">
+	<div class="col-md-12">
+		<h3>Results</h3>
+		<div class="row" ng-repeat="bookmark in app.bookmarks">
+			<div class="col-md-12">
+				<h4 ng-click="bookmark.hidden = !bookmark.hidden" class="pointer">> {{bookmark.title}}</h4>
+				<p>{{bookmark.description}}</p>
+				<ul ng-if="!bookmark.hidden">
+					<li>Url: {{bookmark.url}}</li>
+					<li>Tags: <span ng-click="app.addTagToFilter(tag)" class="tag label label-success pointer" ng-repeat="tag in bookmark.tags">+ {{tag}}</span></li>
+					<li>Source<span ng-if="bookmark.services.length > 1">s</span>: 
+						<ul>
+							<li ng-repeat="source in bookmark.services">{{source}}</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

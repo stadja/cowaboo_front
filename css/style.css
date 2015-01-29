@@ -1,0 +1,44 @@
+body {
+  padding-top: 50px;
+}
+.header {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.tag.label {
+	margin-right: 1em;
+	display: inline-block;
+}
+
+.lastcall {
+	background-color: lightblue;
+}
+
+.lastcall.error {
+	background-color: lightcoral;
+}
+
+.jumbotron .form-group{
+	padding: 1.5em;
+	border: 1px dashed black;
+}
+
+.animated {
+  -webkit-animation-duration: 0.2s;
+  animation-duration: 0.2s;
+}
+
+.animated.animateFadeInDown.ng-animate {
+	-webkit-animation-name: fadeInDown;
+	animation-name: fadeInDown;
+}
+
+.animated.animateFadeInDown.ng-animate.ng-hide {
+	-webkit-animation-name: fadeOutUp;
+	animation-name: fadeOutUp;
+}
