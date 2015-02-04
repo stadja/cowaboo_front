@@ -1,8 +1,19 @@
 <div class="row">
 	<div class="col-md-12">
+		<h3>Service selection<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+		<p>select services from which you want to get your bookmarks or tags</p>
+		<div class="checkbox" ng-repeat="($value, service) in app.serviceList">
+			<label>
+				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" aria-label="service" selected>{{service}}
+			</label>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<h3>Existing Tags<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
 		<button type="button" class="btn btn-primary" ng-click="app.retrieveTags()"><span ng-if="!app.tags.length">Retrieve all</span><span ng-if="app.tags.length">Refresh</span> tags</button>
-		<span ng-click="app.addTagToFilter(tag.title)" class="tag label label-success pointer" ng-repeat="tag in app.tags">+ {{tag.title}}</span>
+		<span ng-click="app.addTagToFilter(tag.title)" class="tag label label-success pointer" ng-repeat="tag in app.tags">+ {{tag.title}} <span ng-repeat="nbrOfElement in tag.nbrOfElement"> | {{nbrOfElement.service}} ({{nbrOfElement.nbr}})</span></span>
 	</div>
 </div>
 <div class="row">
@@ -12,35 +23,59 @@
 		<span class="tag label label-danger pointer" ng-repeat="tag in app.filters.tags" ng-click="app.removeTagToFilter(tag)">X {{tag}}</span>
 	</div>
 </div>
-<div class="row" ng-if="app.bookmarks.length">
+
+<div class="row resultWrapper" ng-if="app.bookmarks.length">
 	<div class="col-md-12">
 		<h3>Results</h3>
-		<div class="row" ng-repeat="bookmark in app.bookmarks">
+		<hr/>
+
+		<div ng-if="app.meta">
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="pointer" ng-click="app.metaAreShown = !app.metaAreShown"><open-icon open="{{app.metaAreShown}}"></open-icon>Meta informations</h3>
+					<div class="animated animateFadeInDown metaWrapper" ng-show="app.metaAreShown">
+						<p>Number of bookmarks: <strong>{{app.meta.merged.count}}</strong></p>
+						<p>Related tags: <span ng-click="app.addTagToFilter(tag.name)" class="tag label label-success pointer" ng-repeat="tag in app.meta.merged.tags">+ {{tag.name}} ({{tag.count}})</span></p>
+					</div>
+				</div>
+			</div>
+			<hr/>
+		</div>	
+
+		<div class="row">
 			<div class="col-md-12">
-				<h4 ng-click="bookmark.hidden = !bookmark.hidden" class="pointer"><open-icon open="{{!!bookmark.hidden}}"></open-icon> {{bookmark.title}}</h4>
-				<p>{{bookmark.description}}</p>
-				<ul ng-if="!bookmark.hidden">
-					<li>Url: {{bookmark.url}}</li>
-					<li>Tags: <span ng-click="app.addTagToFilter(tag)" class="tag label label-success pointer" ng-repeat="tag in bookmark.tags">+ {{tag}}</span></li>
-					<li>Source<span ng-if="bookmark.services.length > 1">s</span>:
-						<ul>
-							<li ng-repeat="source in bookmark.services">{{source}}</li>
-						</ul>
-					</li>
-					<li ng-if="bookmark.notes.length" class="pointer"><span ng-click="notes.shown = !notes.shown"><open-icon open="{{!!notes.shown}}"></open-icon> Note<span ng-if="bookmark.notes.length > 1">s</span></span>
-						<ul ng-if="notes.shown">
-							<li ng-repeat="note in bookmark.notes">
-								<ul>
-									<li><pre>{{note.content}}</pre></li>
-									<li>Service: {{note.service}}</li>
-									<li>User name: {{note.user}}</li>
-									<li>User id: {{note.userid}}</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-				</ul>
+				<h3 class="pointer" ng-click="app.bookmarksAreShown = !app.bookmarksAreShown"><open-icon open="{{app.bookmarksAreShown}}"></open-icon>Bookmarks</h3>
+				<div class="animated animateFadeInDown" ng-show="app.bookmarksAreShown">
+					<div ng-repeat="bookmark in app.bookmarks">
+						<div class="col-md-12 bookmark">
+							<h4 ng-click="bookmark.hidden = !bookmark.hidden" class="pointer"><open-icon open="{{!bookmark.hidden}}"></open-icon> {{bookmark.title}}</h4>
+							<p>{{bookmark.description}}</p>
+							<ul ng-if="!bookmark.hidden">
+								<li>Url: {{bookmark.url}}</li>
+								<li>Tags: <span ng-click="app.addTagToFilter(tag)" class="tag label label-success pointer" ng-repeat="tag in bookmark.tags">+ {{tag}}</span></li>
+								<li>Source<span ng-if="bookmark.services.length > 1">s</span>:
+									<ul>
+										<li ng-repeat="source in bookmark.services">{{source}}</li>
+									</ul>
+								</li>
+								<li ng-if="bookmark.notes.length" class="pointer"><span ng-click="notes.shown = !notes.shown"><open-icon open="{{notes.shown}}"></open-icon> Note<span ng-if="bookmark.notes.length > 1">s ({{bookmark.notes.length}})</span></span>
+									<ul ng-if="notes.shown">
+										<li ng-repeat="note in bookmark.notes">
+											<ul>
+												<li><pre>{{note.content}}</pre></li>
+												<li>Service: {{note.service}}</li>
+												<li>User name: {{note.user}}</li>
+												<li>User id: {{note.userid}}</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
+		
 	</div>
 </div>

@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('usageModule');
 
-    app.controller('usageSaveController', ['Bookmark', 'Tag', '$scope',
+    app.controller('UsageSaveController', ['Bookmark', 'Tag', '$scope',
     	function(Bookmark, Tag, $scope) {
     		var controller = this;
             var bookmarks = new Bookmark();
@@ -10,7 +10,6 @@
             controller.tags = [];
 
             controller.loading    = false;
-            controller.lastUrl    = false;
 
             controller.newElement = {
                 title       : '',
@@ -20,14 +19,14 @@
                 data        : ''
             }
 
-            savedController = sessionStorage.usageSaveController;
+            savedController = sessionStorage.UsageSaveController;
             if (savedController) {
                 angular.extend(controller, angular.fromJson(savedController));
             }
             $scope.$watchCollection(function() {
                 return controller;
             }, function(newState) {
-                sessionStorage.usageSaveController = angular.toJson(newState);
+                sessionStorage.UsageSaveController = angular.toJson(newState);
             });
 
             controller.addTagToInput = function(tag) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" ng-app='cowaboo' ng-controller="AppController as app">
+<html lang="fr" ng-app='cowabooModule' ng-controller="AppController as app">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,8 +48,8 @@
     <div class="container">
 
       <div class="header">
-        <h1>CoWaBoo's usage example</h1>
-        <p class="lead">How to use the CoWaBoo's Api</p>
+        <h1>CoWaBoo's usage example<br/>
+        <small>How to use the CoWaBoo's Api</small></h1>
       </div>
 
       <params></params>
@@ -57,7 +57,7 @@
     	<div class="row">
     		<div class="col-md-12">
           <tabs></tabs>
-          <div class="row">
+          <div class="row contentWrapper">
             <div class="col-md-6">
                 <ng-view></ng-view>
             </div>
@@ -82,22 +82,22 @@
     <script src="js/ie10-viewport-bug-workaround.js"></script>
 
     <!-- AngularJs scripts -->
-    <script src="scripts/app.js"></script>
+    <script src="scripts/app.js?version=1"></script>
 
-    <script src="scripts/tabs/tabs.module.js"></script>
-    <script src="scripts/lastcall/lastcall.module.js"></script>
-    <script src="scripts/params/params.module.js"></script>
+    <script src="scripts/tabs/tabs.module.js?version=1"></script>
+    <script src="scripts/lastcall/lastcall.module.js?version=1"></script>
+    <script src="scripts/params/params.module.js?version=1"></script>
 
-    <script src="scripts/usage/usage.module.js"></script>
-    <script src="scripts/usage/usage.search.js"></script>
-    <script src="scripts/usage/usage.save.js"></script>
+    <script src="scripts/usage/usage.module.js?version=1"></script>
+    <script src="scripts/usage/usage.search.js?version=1"></script>
+    <script src="scripts/usage/usage.save.js?version=1"></script>
+    <script src="scripts/usage/usage.tags.js?version=1"></script>
 
-    <script src="scripts/services/DreamFactoryBeta.js"></script>
+    <script src="scripts/services/DreamFactoryBeta.js?version=1"></script>
 
-    <script src="scripts/models/Abstract.js"></script>
-    <script src="scripts/models/Bookmark.js"></script>
-    <script src="scripts/models/Tag.js"></script>
-
+    <script src="scripts/models/Abstract.js?version=1"></script>
+    <script src="scripts/models/Bookmark.js?version=1"></script>
+    <script src="scripts/models/Tag.js?version=1"></script>
 
   </body>
 </html>

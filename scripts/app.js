@@ -35,7 +35,7 @@ window.addEventListener("orientationchange", hideAddressBar);
 
 
 (function() {
-    var app = angular.module('cowaboo', ['usageModule', 'tabsModule', 'lastcallModule', 'paramsModule']);
+    var app = angular.module('cowabooModule', ['usageModule', 'tabsModule', 'lastcallModule', 'paramsModule']);
 
     app.controller('AppController', [
 
@@ -54,6 +54,18 @@ window.addEventListener("orientationchange", hideAddressBar);
                });
             }
         };
-    }])
+    }]);
+
+    app.filter('notInArray', function() {
+        return function(tags, array) {
+            var filteredVal = [];
+            angular.forEach(tags, function(val, key){
+                if (array.indexOf(val) == '-1') {
+                    filteredVal.push(val);
+                }
+            });
+            return filteredVal;
+        };
+    });
 
 })();

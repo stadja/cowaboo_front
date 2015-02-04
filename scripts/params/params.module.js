@@ -8,10 +8,10 @@
         zoteroKey       : '3k89ouyqI6vYIkTsgPJTK4ek'
     };
 
-    app.controller('paramsController', [ 'Params', '$scope',
+    app.controller('ParamsController', [ 'Params', '$scope',
         function(Params, $scope) {
             var controller = this;
-            controller.hideParams = false;
+            controller.hideParams = true;
 
             controller.diigoPwd = '';
             $scope.$watch(function() {
@@ -69,7 +69,7 @@
             restrict: 'E',
             templateUrl: 'templates/params.html',
             controllerAs: 'params',
-            controller: 'paramsController'
+            controller: 'ParamsController'
         }
     });
 

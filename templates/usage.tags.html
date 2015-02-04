@@ -1,0 +1,70 @@
+<h3>Getting tag related information<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+<div class="row">
+	<div class="col-md-23">
+		<div class="form-group">
+			<label for="tagInput">Select the Tag you want to study</label>
+			
+			<button type="button" class="btn btn-primary" ng-click="app.retrieveTags()"><span ng-if="!app.tags.length">Retrieve all</span><span ng-if="app.tags.length">Refresh</span> tags</button>
+			<span ng-click="app.replaceTagInInput(tag.title)" class="tag label label-success pointer" ng-repeat="tag in app.tags">{{tag.title}}</span>
+			<hr>
+			<div >
+				<label ng-if="app.tagPath.length > 0" for="tagInput">Tag breadcrumb</label>
+				<div>
+					<ol class="breadcrumb">
+						<li class="pointer" ng-if="app.tagPath.length > 1" ng-click="app.startAtTag(app.tagPath[app.tagPath.length - 2])">&lt;-</li>
+						<li ng-repeat="tag in app.tagPath" ng-class="{active: $index == (app.tagPath.length - 1)}">
+							<a class="pointer" ng-click="app.replaceTagInInput(tag)">{{tag}}</a>
+							<!-- <a class="pointer" ng-click="app.replaceTagInInput(tag)" ng-if="$index != (app.tagPath.length - 1)">{{tag}}</a>
+							<span ng-if="$index == (app.tagPath.length - 1)">{{tag}}</span> -->
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <div class="row" ng-if="app.tag">
+		<div class="col-md-12">
+				<button type="button" class="btn btn-primary" ng-click="app.getRelatedTags(app.tag)">Getting related tags</button>
+		</div>
+</div> -->
+<div class="row resultWrapper" ng-if="app.relatedTags || app.relatedInfo">
+	<div class="col-md-12">
+		<div class="row" ng-if="app.relatedTags">
+			<div class="col-md-12">
+				<h3>Tags related to '{{app.tagPath.join(' ')}}'</h3>
+				<div>
+					<span ng-click="app.addTagToInput(relatedTag)" class="tag label label-success pointer" ng-repeat="relatedTag in app.relatedTags | notInArray:app.tagPath">{{relatedTag}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-if="app.suggestion">
+			<div class="col-md-12">
+				<h3>Suggestion</h3>
+				<div>
+					<span ng-click="app.replaceCurrentTagPath(app.suggestion)" class="tag label label-success pointer">{{app.suggestion}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-if="app.relatedInfo">
+			<div class="col-md-12">
+				<h3>Articles about '{{app.tagPath.join(' ')}}'</h3>
+				<div>
+					<div ng-repeat="relatedInfo in app.relatedInfo" class="relatedInfo col-md-12">
+						<h4>
+							<span ng-if="relatedInfo.titlesnippet != ''" ng-bind-html="app.sce.trustAsHtml(relatedInfo.titlesnippet)"></span><span ng-if="relatedInfo.titlesnippet == ''">{{relatedInfo.title}}</span>
+						<small><a target="_blank" ng-href="{{relatedInfo.url}}">&gt; voir</a></small></h4>
+						<p ng-bind-html="app.sce.trustAsHtml(relatedInfo.snippet)"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <div class="row">
+		<div class="col-md-12">
+				<h3>Getting bookmarks<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+				<button type="button" class="btn btn-primary" ng-click="app.search()"><span ng-if="!app.bookmarks.length">Search all</span><span ng-if="app.bookmarks.length">Refresh</span> bookmarks</button>
+				<span class="tag label label-danger pointer" ng-repeat="tag in app.filters.tags" ng-click="app.removeTagToFilter(tag)">X {{tag}}</span>
+		</div>
+</div> -->

@@ -33,6 +33,21 @@
                     this.rest('get', 'tags?'+param, {}, callback, error); 
                 };
 
+                tag.getRelatedInfo = function(tag, callback, error) {
+                    var args = {tag: tag};
+                    var param = '';
+
+                    angular.forEach(args, function(value, key) {
+                        if (param) {
+                            param += '&';
+                        } 
+                        param += key+'='+encodeURIComponent(value);
+                        
+                    });
+
+                    this.rest('get', 'tags/related?'+param, {}, callback, error); 
+                };
+
                /* tag.saveTag = function(args, callback) {
                     if (!args) {
                         args = {};

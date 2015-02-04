@@ -15,8 +15,43 @@ body {
 	display: inline-block;
 }
 
+.nav-tabs {
+border-bottom: none;
+}
+
+.contentWrapper {
+	border: 1px solid #eee;
+	border-radius: 5px;
+}
+
+.resultWrapper {
+	background-color: lightgreen;
+	margin-top: 2em;
+	padding-top: 0.5em;
+	padding-bottom: 1em;
+}
+
+.metaWrapper {
+	background-color: white;
+	background-color: rgba(255, 255, 255, .5);
+	border-radius: 5px;
+	padding: 0.5em 0.5em 0.1em 0.5em;
+}
+
+.bookmark, .relatedInfo {
+	background-color: white;
+	background-color: rgba(255, 255, 255, .5);
+	border-radius: 5px;
+	margin-bottom: 1em;
+}
+
+.searchmatch {
+	background-color: lightgreen;
+}
+
 .lastcall {
 	background-color: lightblue;
+	border-radius: 0px 5px 0px 0px;
 }
 
 .lastcall.error {
@@ -34,11 +69,11 @@ body {
 }
 
 .animated.animateFadeInDown.ng-animate {
-	-webkit-animation-name: fadeInDown;
-	animation-name: fadeInDown;
+	-webkit-animation-name: fadeIn;
+	animation-name: fadeIn;
 }
 
 .animated.animateFadeInDown.ng-animate.ng-hide {
-	-webkit-animation-name: fadeOutUp;
-	animation-name: fadeOutUp;
+	-webkit-animation-name: fadeOut;
+	animation-name: fadeOut;
 }

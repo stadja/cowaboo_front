@@ -1,32 +1,63 @@
 (function() {
     var app = angular.module('usageModule');
-
-    app.controller('usageSearchController', ['Bookmark', 'Tag', '$scope', '$sce',
+    
+    app.controller('UsageSearchController', ['Bookmark', 'Tag', '$scope', '$sce',
     	function(Bookmark, Tag, $scope, $sce) {
             var bookmarks = new Bookmark();
             var tags = new Tag();
     		var controller = this;
 
             controller.bookmarks = [];
-            controller.filters = {
-                tags: []
+            controller.meta = false;
+
+            controller.serviceList = {
+                'diigo' : 'Diigo',
+                'zotero': 'Zotero'
             };
 
-            savedController = sessionStorage.usageSearchController;
+            controller.filters = {
+                tags    : [],
+                services: []
+            };
+
+            savedController = sessionStorage.UsageSearchController;
             if (savedController) {
                 angular.extend(controller, angular.fromJson(savedController));
             }
             $scope.$watchCollection(function() {
                 return controller;
             }, function(newState) {
-                sessionStorage.usageSearchController = angular.toJson(newState);
+                sessionStorage.UsageSearchController = angular.toJson(newState);
             });
 
             controller.loading = false;
 
+            controller._getFilters = function () {
+                var filters = {};
+                if (controller.filters.tags.length) {
+                    filters.tags = controller.filters.tags.join(',');
+                }
+                var services = '';
+                angular.forEach(controller.filters.services, function(value, key) {
+                    if (value) {
+                        if (services) {
+                            services += ',';
+                        }
+                        services += value;
+                    }
+                });
+                if (services) {
+                    filters.services = services;
+                }
+
+                return filters;
+            }
+
             controller.retrieveTags = function() {
+                var filters = controller._getFilters();
+
                 controller.loading = true;
-                tags.getTags({}, function(data, status, headers, config){
+                tags.getTags(filters, function(data, status, headers, config){
                     controller.tags = data;
                     controller.loading = false;
                 }, function() {
@@ -39,11 +70,10 @@
     				return false;
     			}
     			controller.loading = true;
-    			var filters = {};
-    			if (controller.filters.tags.length) {
-    				filters.tags = controller.filters.tags.join(',');
-    			}
+                var filters = controller._getFilters();
+    			
 				bookmarks.getBookmarks(filters, function(data, status, headers, config) {
+                    controller.meta = data.meta;
 					controller.bookmarks = data.merged;
     				controller.loading = false;
 				}, function() {
@@ -70,6 +100,7 @@
     			controller.filters.tags.splice(i,1);
     			controller.search();
     		}
+
     	}
     ]);
 })()

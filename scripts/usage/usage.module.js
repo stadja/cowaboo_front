@@ -5,16 +5,22 @@
         function($routeProvider) {
             $routeProvider.
             when('/usage/search', {
-                controller: 'usageSearchController',
+                controller: 'UsageSearchController',
                 controllerAs: 'app',
                 templateUrl: 'templates/usage.search.html',
                 pageTitle: 'search'
             }).
             when('/usage/save', {
-                controller: 'usageSaveController',
+                controller: 'UsageSaveController',
                 controllerAs: 'app',
                 templateUrl: 'templates/usage.save.html',
                 pageTitle: 'save'
+            }).
+            when('/usage/tags', {
+                controller: 'UsageTagsController',
+                controllerAs: 'app',
+                templateUrl: 'templates/usage.tags.html',
+                pageTitle: 'tags'
             }).
             otherwise({
                 redirectTo: '/usage/search'
