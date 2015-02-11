@@ -11,7 +11,19 @@
             controller.relatedTags = false;
             controller.relatedInfo = false;
             controller.suggestion  = false;
-            
+            controller.serviceList = {
+                'diigo' : 'Diigo',
+                'zotero': 'Zotero'
+            };
+            controller.tagServiceList = {
+                'wikipedia' : 'Related articles from Wikimedia API',
+                'diigo' : 'Related tags from all Diigo\'s communities',
+            };
+            controller.filters = {
+                tagServices: [],
+                services   : []
+            };
+
             savedController = sessionStorage.usageTabController;
             if (savedController) {
                 angular.extend(controller, angular.fromJson(savedController));
@@ -74,9 +86,50 @@
                 controller.addTagToInput(tag);
             }
 
+            controller._getFilters = function (filters) {
+
+                if (filters.services) {
+                    var services = '';
+                    angular.forEach(controller.filters.services, function(value, key) {
+                        if (value) {
+                            if (services) {
+                                services += ',';
+                            }
+                            services += value;
+                        }
+                        if (services) {
+                            filters.services = services;
+                        }
+                    });
+                }
+                
+                if (filters.tagServices) {
+                    var tagServices = '';
+                    angular.forEach(controller.filters.tagServices, function(value, key) {
+                        if (value) {
+                            if (tagServices) {
+                                tagServices += ',';
+                            }
+                            tagServices += value;
+                        }
+                    });
+                    if (tagServices) {
+                        filters.tag_services = tagServices;
+                    }
+                }
+
+                if (filters.tag) {
+                    filters.tag = controller.tagPath.join(' ');
+                }
+
+                return filters;
+            }
+
             controller.retrieveTags = function() {
                 controller.startQuery();
-                tags.getTags({}, function(data, status, headers, config){
+                
+                var filters = controller._getFilters({'service': true});
+                tags.getTags(filters, function(data, status, headers, config){
                     controller.tags = data;
                     controller.endQuery();
                 }, function() {
@@ -92,15 +145,23 @@
                 controller.relatedTags = false;
                 controller.relatedInfo = false;
                 controller.suggestion  = false;
-                var tag = controller.tagPath.join(' ');
-                tags.getRelatedInfo(tag, function(data, status, headers, config){
-                    controller.relatedTags = data.related_tags;
-                    if (data.related_info.articles.length > 0) {
-                        controller.relatedInfo = data.related_info.articles;
+
+                var filters = controller._getFilters({'tagServices': true, 'tag': true});
+                tags.getRelatedInfo(filters, function(data, status, headers, config){
+                    if (data.diigo) {
+                        controller.relatedTags = data.diigo;
                     }
-                    if (data.related_info.suggestion) {
-                        controller.suggestion = data.related_info.suggestion;
+
+                    if (data.wikipedia) {
+                        if (data.wikipedia.articles.length > 0) {
+                            controller.relatedInfo = data.wikipedia.articles;
+                        }  
+
+                        if (data.wikipedia.suggestion) {
+                            controller.suggestion = data.wikipedia.suggestion;
+                        }  
                     }
+                    
                     controller.endQuery();
                 }, function() {
                     controller.endQuery();

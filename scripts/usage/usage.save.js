@@ -19,6 +19,15 @@
                 data        : ''
             }
 
+            controller.serviceList = {
+                'diigo' : 'Diigo',
+                'zotero': 'Zotero'
+            };
+
+            controller.filters = {
+                services: []
+            };
+
             savedController = sessionStorage.UsageSaveController;
             if (savedController) {
                 angular.extend(controller, angular.fromJson(savedController));
@@ -54,12 +63,28 @@
                 }
                 controller.loading = true;
 
+                var filters = {};
+                var services = '';
+                angular.forEach(controller.filters.services, function(value, key) {
+                    if (value) {
+                        if (services) {
+                            services += ',';
+                        }
+                        services += value;
+                    }
+                });
+                if (services) {
+                    filters.services = services;
+                }
+
                 var bookmark = {
                     title: controller.newElement.title,
                     url: controller.newElement.url,
                     description: controller.newElement.description,
-                    tags: controller.newElement.tags
+                    tags: controller.newElement.tags,
+                    services: filters.services
                 };
+
                 bookmarks.saveBookmark(bookmark, function(data, status, headers, config) {
                     controller.loading = false;
                     controller.newElement.title = "";

@@ -47,12 +47,15 @@
 
             };
 
-            controller.init = function() {
+            controller.init = function(dontsave) {
                 angular.extend(controller, app.initConfig);
                 angular.extend(Params, app.initConfig);
+                if (!dontsave) {
+                    controller.save();
+                }
             }
 
-            controller.init();
+            controller.init(true);
 
             if (sessionStorage.savedParams) {
                 var savedParams = angular.fromJson(sessionStorage.savedParams);

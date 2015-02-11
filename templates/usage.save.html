@@ -1,4 +1,10 @@
 <h3>Saving bookmarks<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+<p>Select services to which you want to save your bookmark</p>
+<div class="checkbox" ng-repeat="($value, service) in app.serviceList">
+	<label>
+		<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" aria-label="service" checked ng-checked='true'>{{service}}
+	</label>
+</div>
 
 <form ng-submit="app.saveBookmark();">
 	<div class="form-group">

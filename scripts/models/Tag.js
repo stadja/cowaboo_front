@@ -33,10 +33,13 @@
                     this.rest('get', 'tags?'+param, {}, callback, error); 
                 };
 
-                tag.getRelatedInfo = function(tag, callback, error) {
-                    var args = {tag: tag};
-                    var param = '';
+                tag.getRelatedInfo = function(filters, callback, error) {
+                    var args = filters;
+                    if (!args) {
+                        args = {};
+                    }
 
+                    var param = '';
                     angular.forEach(args, function(value, key) {
                         if (param) {
                             param += '&';
@@ -47,24 +50,7 @@
 
                     this.rest('get', 'tags/related?'+param, {}, callback, error); 
                 };
-
-               /* tag.saveTag = function(args, callback) {
-                    if (!args) {
-                        args = {};
-                    }
-                    var param = '';
-                    args.zotero_users_or_groups = "groups";
-                    args.zotero_elementId = "303941";
-
-                    angular.forEach(args, function(value, key) {
-                        if (param) {
-                            param += '&';
-                        } 
-                        param += key+'='+encodeURIComponent(value);
-                    });
-                    this.rest('post', 'tags?'+param, {}, callback); 
-                };*/
-
+                
                 return tag;
             };
 

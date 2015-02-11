@@ -1,10 +1,10 @@
 <div class="row">
 	<div class="col-md-12">
 		<h3>Service selection<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
-		<p>select services from which you want to get your bookmarks or tags</p>
+		<p>Select services from which you want to get your bookmarks or tags</p>
 		<div class="checkbox" ng-repeat="($value, service) in app.serviceList">
 			<label>
-				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" aria-label="service" selected>{{service}}
+				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" aria-label="service" checked ng-checked='true'>{{service}}
 			</label>
 		</div>
 	</div>
