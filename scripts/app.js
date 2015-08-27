@@ -37,9 +37,8 @@ window.addEventListener("orientationchange", hideAddressBar);
 (function() {
     var app = angular.module('cowabooModule', ['usageModule', 'tabsModule', 'lastcallModule', 'paramsModule']);
 
-    app.controller('AppController', [
+    app.controller('AppController', [function() {
 
-        function() {
         }
     ]);
 

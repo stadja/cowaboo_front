@@ -1,0 +1,40 @@
+<div class="row">
+	<div class="col-md-12">
+		<h3>Service selection<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+		<p>Select services from which you want to get your tags</p>
+		<div class="checkbox" ng-repeat="($value, service) in app.serviceList">
+			<label>
+				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" ng-checked='app.filters.services[$index]'>{{service}}
+			</label>
+		</div>
+		<p>Select services from which you want to get your tag related users</p>
+		<div class="checkbox" ng-repeat="($value, service) in app.userServiceList">
+			<label>
+				<input type="checkbox" ng-model="app.filters.userServices[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" checked ng-checked='app.filters.userServices[$index]'>{{service}}
+			</label>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<h3>Getting tag related users<img src="assets/ajax-loader.gif" ng-show="app.loading" /></h3>
+		<div class="form-user">
+			<label for="tagInput">Select the Tag you want to study</label>
+			<button type="button" class="btn btn-primary" ng-click="app.retrieveTags()"><span ng-if="!app.tags.length">Retrieve all</span><span ng-if="app.tags.length">Refresh</span> tags</button>
+			<span ng-click="app.replaceTagInInput(tag.title)" class="tag label label-success pointer" ng-repeat="tag in app.tags">{{tag.title}}</span>
+		</div>
+	</div>
+</div>
+
+<div class="row resultWrapper" ng-if="app.relatedUsers">
+	<div class="col-md-12">
+		<h3>Users related to '{{app.tag}}'</h3>
+		<div>
+			<div ng-repeat="user in app.relatedUsers" class="relatedInfo col-md-12">
+				<h4>{{user.name}}</h4>
+				<p><a href="{{user.url}}" target="_blank">{{user.url}}</a></p>
+				<p ng-bind-html="app.sce.trustAsHtml(user.info)"></p>
+			</div>
+		</div>
+	</div>
+</div>

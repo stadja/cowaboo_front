@@ -4,13 +4,13 @@
 		<p>Select services from which you want to get your tags</p>
 		<div class="checkbox" ng-repeat="($value, service) in app.serviceList">
 			<label>
-				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" checked="checked">{{service}}
+				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" ng-checked='app.filters.services[$index]'>{{service}}
 			</label>
 		</div>
 		<p>Select services from which you want to get your tag related information</p>
 		<div class="checkbox" ng-repeat="($value, service) in app.tagServiceList">
 			<label>
-				<input type="checkbox" ng-model="app.filters.tagServices[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" checked ng-checked='true'>{{service}}
+				<input type="checkbox" ng-model="app.filters.tagServices[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" checked ng-checked='app.filters.tagServices[$index]'>{{service}}
 			</label>
 		</div>
 	</div>

@@ -1,15 +1,8 @@
 (function() {
-    var app = angular.module('paramsModule', ['ngAnimate']);
+    var app = angular.module('paramsModule', ['ngAnimate', 'IndexDbService']);
 
-    app.initConfig = {
-        diigoUsername   : 'cowaboo',
-        diigoAuth       : 'basic Y293YWJvbzpQYXNzd29yZCA0IGNvd2Fib28=',
-        zoteroElementId : '303941',
-        zoteroKey       : '3k89ouyqI6vYIkTsgPJTK4ek'
-    };
-
-    app.controller('ParamsController', [ 'Params', '$scope',
-        function(Params, $scope) {
+    app.controller('ParamsController', [ 'Params', '$rootScope', '$scope', 'IndexDb',
+        function(Params, $rootScope, $scope, IndexDb) {
             var controller = this;
             controller.hideParams = true;
 
@@ -18,7 +11,7 @@
                 return controller.diigoPwd;
             }, function(newValue) {
                 if (!newValue || !controller.diigoUsername) {
-                    return controller.diigoAuth = app.initConfig.diigoAuth;
+                    return controller.diigoAuth = '';
                 }
                 controller.diigoAuth = 'basic '+btoa(controller.diigoUsername+':'+newValue);
             });
@@ -27,7 +20,7 @@
                 return controller.diigoUsername;
             }, function(newValue) {
                 if (!newValue || !controller.diigoPwd) {
-                    return controller.diigoAuth = app.initConfig.diigoAuth;
+                    return controller.diigoAuth = '';
                 }
                 controller.diigoAuth = 'basic '+btoa(newValue+':'+controller.diigoPwd);
             });
@@ -35,33 +28,41 @@
             controller.save = function() {
                 controller.hideParams = true;
                 
-                var savedParams = {
-                    diigoUsername   : controller.diigoUsername,
-                    diigoAuth       : controller.diigoAuth,
-                    zoteroElementId : controller.zoteroElementId,
-                    zoteroKey       : controller.zoteroKey
-                };
-
-                sessionStorage.savedParams = angular.toJson(savedParams);
-                angular.extend(Params, savedParams);
+                IndexDb.save('params', {id: 'diigoUsername', value: controller.diigoUsername}, function(event) {
+                    Params.diigoUsername = controller.diigoUsername;
+                });
+                IndexDb.save('params', {id: 'diigoAuth', value: controller.diigoAuth}, function(event) {
+                    Params.diigoAuth = controller.diigoAuth;
+                });
+                IndexDb.save('params', {id: 'zoteroElementId', value: controller.zoteroElementId}, function(event) {
+                    Params.zoteroElementId = controller.zoteroElementId;
+                });
+                IndexDb.save('params', {id: 'zoteroKey', value: controller.zoteroKey}, function(event) {
+                    Params.zoteroKey = controller.zoteroKey;
+                });
 
             };
 
             controller.init = function(dontsave) {
-                angular.extend(controller, app.initConfig);
-                angular.extend(Params, app.initConfig);
+                IndexDb.load('params-init', ['diigoUsername', 'diigoAuth', 'zoteroElementId', 'zoteroKey'], function(values) {
+                    for (var i in values) {
+                        controller[values[i].id] = values[i].value;
+                        Params[values[i].id] = values[i].value;
+                    }
+                });
                 if (!dontsave) {
                     controller.save();
                 }
             }
 
-            controller.init(true);
-
-            if (sessionStorage.savedParams) {
-                var savedParams = angular.fromJson(sessionStorage.savedParams);
-                angular.extend(controller, savedParams);
-                angular.extend(Params, savedParams);
-            }
+            $rootScope.$on('indexdb-open-success', function(){
+                IndexDb.load('params', ['diigoUsername', 'diigoAuth', 'zoteroElementId', 'zoteroKey'], function(values) {
+                    for (var i in values) {
+                        controller[values[i].id] = values[i].value;
+                        Params[values[i].id] = values[i].value;
+                    }
+                });
+            });
 
             return controller;
         }
@@ -78,6 +79,42 @@
 
     app.service('Params', [function () {
         var params = this;
+
+        params.generateQuery = function(args) {
+            if (!args) {
+                args = {};
+            }
+
+            var query = '';
+
+            if (!args.services) {
+                args.diigo_username = params.diigoUsername;
+                args.diigo_access_key = params.diigoAuth;
+                args.zotero_users_or_groups = "groups";
+                args.zotero_elementId = params.zoteroElementId;
+                args.zotero_api_key = params.zoteroKey;
+            } else {
+                if (args.services.indexOf('diigo') != -1) {
+                    args.diigo_username = params.diigoUsername;
+                    args.diigo_access_key = params.diigoAuth;
+                }
+                if (args.services.indexOf('zotero') != -1) {
+                    args.zotero_users_or_groups = "groups";
+                    args.zotero_elementId = params.zoteroElementId;
+                    args.zotero_api_key = params.zoteroKey;
+                }
+            }
+
+            angular.forEach(args, function(value, key) {
+                if (query) {
+                    query += '&';
+                } 
+                query += key+'='+encodeURIComponent(value);
+                
+            });
+            return query;
+        }
+
         return params;
     }]);
 

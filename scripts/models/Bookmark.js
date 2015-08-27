@@ -13,45 +13,13 @@
                 bookmark.setData(data);
 
                 bookmark.getBookmarks = function(args, callback, error) {
-                    if (!args) {
-                        args = {};
-                    }
-                    var param = '';
-                    args.diigo_username = Params.diigoUsername;
-                    args.diigo_access_key = Params.diigoAuth;
-                    args.zotero_users_or_groups = "groups";
-                    args.zotero_elementId = Params.zoteroElementId;
-                    args.zotero_api_key = Params.zoteroKey;
-
-                    angular.forEach(args, function(value, key) {
-                        if (param) {
-                            param += '&';
-                        } 
-                        param += key+'='+encodeURIComponent(value);
-                        
-                    });
-
-                    this.rest('get', 'bookmarks?'+param, {}, callback, error); 
+                    query = Params.generateQuery(args);
+                    this.rest('get', 'bookmarks?'+query, {}, callback, error); 
                 };
 
                 bookmark.saveBookmark = function(args, callback, error) {
-                    if (!args) {
-                        args = {};
-                    }
-                    var param = '';
-                    args.diigo_username = Params.diigoUsername;
-                    args.diigo_access_key = Params.diigoAuth;
-                    args.zotero_users_or_groups = "groups";
-                    args.zotero_elementId = Params.zoteroElementId;
-                    args.zotero_api_key = Params.zoteroKey;
-
-                    angular.forEach(args, function(value, key) {
-                        if (param) {
-                            param += '&';
-                        } 
-                        param += key+'='+encodeURIComponent(value);
-                    });
-                    this.rest('post', 'bookmarks?'+param, {}, callback, error); 
+                    query = Params.generateQuery(args);
+                    this.rest('post', 'bookmarks?'+query, {}, callback, error); 
                 };
 
                 return bookmark;

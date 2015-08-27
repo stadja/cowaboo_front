@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('usageModule');
 
-    app.controller('UsageTagsController', ['Bookmark', 'Tag', '$scope', '$sce',
+    app.controller('UsageUsersController', ['Bookmark', 'Tag', '$scope', '$sce',
         function(Bookmark, Tag, $scope, $sce) {
             var controller = this;
             var tags = new Tag();
@@ -9,21 +9,18 @@
                 controller.tags = tags;
             });
 
-            controller.tag         = '';
-            controller.tagPath     = [];
-            controller.relatedTags = false;
-            controller.relatedInfo = false;
-            controller.suggestion  = false;
+            controller.tag           = '';
+            controller.relatedUsers = false;
+
             controller.serviceList = {
                 'diigo' : 'Diigo',
                 'zotero': 'Zotero'
             };
-            controller.tagServiceList = {
-                'wikipedia' : 'Related articles from Wikimedia API',
-                'diigo' : 'Related tags from all Diigo\'s communities',
+            controller.userServiceList = {
+                'zotero' : 'Zotero\'s community\'s users',
             };
             controller.filters = {
-                tagServices: ['wikipedia', 'diigo'],
+                userServices: ['zotero'],
                 services: ['diigo', 'zotero']
             };
 
@@ -56,37 +53,7 @@
                     return false;
                 }
                 controller.tag = tag;
-                controller.tagPath = [tag];
                 controller.getRelatedInfo();
-            }
-
-            controller.addTagToInput = function(tag) {
-                if (controller.loading) {
-                    return false;
-                }
-                controller.tag = tag;
-                controller.tagPath.push(tag);
-                controller.getRelatedInfo();
-            }
-
-            controller.replaceCurrentTagPath = function(tagPath) {
-                if (controller.loading) {
-                    return false;
-                }
-                controller.tagPath = tagPath.split(' ');
-                controller.getRelatedInfo();
-            }
-
-            controller.startAtTag = function(tag) {
-                if (controller.loading) {
-                    return false;
-                }
-                $tagIndex = controller.tagPath.indexOf(tag);
-                if ($tagIndex == '-1') {
-                    return controller.replaceTagInInput(tag);
-                }
-                controller.tagPath.splice($tagIndex, controller.tagPath.length - ($tagIndex));
-                controller.addTagToInput(tag);
             }
 
             controller._getFilters = function (filters) {
@@ -105,23 +72,23 @@
                     });
                 }
                 
-                if (filters.tagServices) {
-                    var tagServices = '';
-                    angular.forEach(controller.filters.tagServices, function(value, key) {
+                if (filters.user_services) {
+                    var userServices = '';
+                    angular.forEach(controller.filters.userServices, function(value, key) {
                         if (value) {
-                            if (tagServices) {
-                                tagServices += ',';
+                            if (userServices) {
+                                userServices += ',';
                             }
-                            tagServices += value;
+                            userServices += value;
                         }
                     });
-                    if (tagServices) {
-                        filters.tag_services = tagServices;
+                    if (userServices) {
+                        filters.user_services = userServices;
                     }
                 }
 
                 if (filters.tag) {
-                    filters.tag = controller.tagPath.join(' ');
+                    filters.tag = controller.tag;
                 }
 
                 return filters;
@@ -144,30 +111,21 @@
                     return false;
                 }
                 controller.startQuery();
-                controller.relatedTags = false;
-                controller.relatedInfo = false;
-                controller.suggestion  = false;
 
-                var filters = controller._getFilters({'tagServices': true, 'tag': true});
-                tags.getRelatedInfo(filters, function(data, status, headers, config){
-                    if (data.diigo) {
-                        controller.relatedTags = data.diigo;
-                    }
-
-                    if (data.wikipedia) {
-                        if (data.wikipedia.articles.length > 0) {
-                            controller.relatedInfo = data.wikipedia.articles;
-                        }  
-
-                        if (data.wikipedia.suggestion) {
-                            controller.suggestion = data.wikipedia.suggestion;
-                        }  
+                var filters = controller._getFilters({'user_services': true, 'tag': true});
+                tags.getRelatedUsers(filters, function(data, status, headers, config){
+                    if (data.zotero) {
+                        controller.relatedUsers = data.zotero;
+                        if (!controller.relatedUsers.length) {
+                            controller.relatedUsers = false;
+                        }
                     }
                     
                     controller.endQuery();
                 }, function() {
                     controller.endQuery();
                 });
+
             }
 
             return controller;

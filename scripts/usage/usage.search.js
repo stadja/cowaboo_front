@@ -3,9 +3,13 @@
     
     app.controller('UsageSearchController', ['Bookmark', 'Tag', '$scope', '$sce',
     	function(Bookmark, Tag, $scope, $sce) {
+    		var controller = this;
             var bookmarks = new Bookmark();
             var tags = new Tag();
-    		var controller = this;
+            tags.loadStoredTags(function(tags) {
+                controller.tags = tags;
+            });
+            
 
             controller.bookmarks = [];
             controller.meta = false;
@@ -17,7 +21,7 @@
 
             controller.filters = {
                 tags    : [],
-                services: []
+                services: ['diigo', 'zotero']
             };
 
             savedController = sessionStorage.UsageSearchController;

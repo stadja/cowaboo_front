@@ -6,8 +6,9 @@
     		var controller = this;
             var bookmarks = new Bookmark();
     		var tags = new Tag();
-
-            controller.tags = [];
+            tags.loadStoredTags(function(tags) {
+                controller.tags = tags;
+            });
 
             controller.loading    = false;
 
@@ -25,7 +26,7 @@
             };
 
             controller.filters = {
-                services: []
+                services: ['diigo', 'zotero']
             };
 
             savedController = sessionStorage.UsageSaveController;

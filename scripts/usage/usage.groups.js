@@ -1,29 +1,26 @@
 (function() {
     var app = angular.module('usageModule');
 
-    app.controller('UsageTagsController', ['Bookmark', 'Tag', '$scope', '$sce',
+    app.controller('UsageGroupsController', ['Bookmark', 'Tag', '$scope', '$sce',
         function(Bookmark, Tag, $scope, $sce) {
             var controller = this;
             var tags = new Tag();
             tags.loadStoredTags(function(tags) {
                 controller.tags = tags;
             });
+            
+            controller.tag           = '';
+            controller.relatedGroups = false;
 
-            controller.tag         = '';
-            controller.tagPath     = [];
-            controller.relatedTags = false;
-            controller.relatedInfo = false;
-            controller.suggestion  = false;
             controller.serviceList = {
                 'diigo' : 'Diigo',
                 'zotero': 'Zotero'
             };
-            controller.tagServiceList = {
-                'wikipedia' : 'Related articles from Wikimedia API',
-                'diigo' : 'Related tags from all Diigo\'s communities',
+            controller.groupServiceList = {
+                'zotero' : 'Zotero\'s community\'s groups',
             };
             controller.filters = {
-                tagServices: ['wikipedia', 'diigo'],
+                groupServices: ['zotero'],
                 services: ['diigo', 'zotero']
             };
 
@@ -56,37 +53,7 @@
                     return false;
                 }
                 controller.tag = tag;
-                controller.tagPath = [tag];
                 controller.getRelatedInfo();
-            }
-
-            controller.addTagToInput = function(tag) {
-                if (controller.loading) {
-                    return false;
-                }
-                controller.tag = tag;
-                controller.tagPath.push(tag);
-                controller.getRelatedInfo();
-            }
-
-            controller.replaceCurrentTagPath = function(tagPath) {
-                if (controller.loading) {
-                    return false;
-                }
-                controller.tagPath = tagPath.split(' ');
-                controller.getRelatedInfo();
-            }
-
-            controller.startAtTag = function(tag) {
-                if (controller.loading) {
-                    return false;
-                }
-                $tagIndex = controller.tagPath.indexOf(tag);
-                if ($tagIndex == '-1') {
-                    return controller.replaceTagInInput(tag);
-                }
-                controller.tagPath.splice($tagIndex, controller.tagPath.length - ($tagIndex));
-                controller.addTagToInput(tag);
             }
 
             controller._getFilters = function (filters) {
@@ -105,23 +72,23 @@
                     });
                 }
                 
-                if (filters.tagServices) {
-                    var tagServices = '';
-                    angular.forEach(controller.filters.tagServices, function(value, key) {
+                if (filters.group_services) {
+                    var groupServices = '';
+                    angular.forEach(controller.filters.groupServices, function(value, key) {
                         if (value) {
-                            if (tagServices) {
-                                tagServices += ',';
+                            if (groupServices) {
+                                groupServices += ',';
                             }
-                            tagServices += value;
+                            groupServices += value;
                         }
                     });
-                    if (tagServices) {
-                        filters.tag_services = tagServices;
+                    if (groupServices) {
+                        filters.group_services = groupServices;
                     }
                 }
 
                 if (filters.tag) {
-                    filters.tag = controller.tagPath.join(' ');
+                    filters.tag = controller.tag;
                 }
 
                 return filters;
@@ -144,30 +111,21 @@
                     return false;
                 }
                 controller.startQuery();
-                controller.relatedTags = false;
-                controller.relatedInfo = false;
-                controller.suggestion  = false;
 
-                var filters = controller._getFilters({'tagServices': true, 'tag': true});
-                tags.getRelatedInfo(filters, function(data, status, headers, config){
-                    if (data.diigo) {
-                        controller.relatedTags = data.diigo;
-                    }
-
-                    if (data.wikipedia) {
-                        if (data.wikipedia.articles.length > 0) {
-                            controller.relatedInfo = data.wikipedia.articles;
-                        }  
-
-                        if (data.wikipedia.suggestion) {
-                            controller.suggestion = data.wikipedia.suggestion;
-                        }  
+                var filters = controller._getFilters({'group_services': true, 'tag': true});
+                tags.getRelatedGroups(filters, function(data, status, headers, config){
+                    if (data.zotero) {
+                        controller.relatedGroups = data.zotero;
+                        if (!controller.relatedGroups.length) {
+                            controller.relatedGroups = false;
+                        }
                     }
                     
                     controller.endQuery();
                 }, function() {
                     controller.endQuery();
                 });
+
             }
 
             return controller;

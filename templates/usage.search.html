@@ -4,7 +4,7 @@
 		<p>Select services from which you want to get your bookmarks or tags</p>
 		<div class="checkbox" ng-repeat="($value, service) in app.serviceList">
 			<label>
-				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" aria-label="service" checked ng-checked='true'>{{service}}
+				<input type="checkbox" ng-model="app.filters.services[$index]" ng-true-value="'{{$value}}'" ng-false-value="false" aria-label="service" ng-checked='app.filters.services[$index]'>{{service}}
 			</label>
 		</div>
 	</div>

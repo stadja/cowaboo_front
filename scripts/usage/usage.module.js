@@ -22,6 +22,18 @@
                 templateUrl: 'templates/usage.tags.html',
                 pageTitle: 'tags'
             }).
+            when('/usage/groups', {
+                controller: 'UsageGroupsController',
+                controllerAs: 'app',
+                templateUrl: 'templates/usage.groups.html',
+                pageTitle: 'groups'
+            }).
+            when('/usage/users', {
+                controller: 'UsageUsersController',
+                controllerAs: 'app',
+                templateUrl: 'templates/usage.users.html',
+                pageTitle: 'users'
+            }).
             otherwise({
                 redirectTo: '/usage/search'
             });
